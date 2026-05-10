@@ -1,1 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GhostMapX Controller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #1a1a1a; color: white; }
+        #map { height: 50vh; width: 100%; }
+        .panel { padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        input, select, button { padding: 12px; border-radius: 5px; border: none; font-size: 14px; }
+        input { background: #333; color: white; }
+        select { background: #444; color: white; }
+        .status { font-size: 12px; text-align: center; color: #888; }
+        .btn-play { background: #27ae60; color: white; font-weight: bold; cursor: pointer; }
+        .btn-stop { background: #c0392b; color: white; cursor: pointer; }
+    </style>
+</head>
+<body>
 
+    <div id="map"></div>
+
+    <div class="panel">
+        <input type="text" id="androidId" placeholder="Input Android ID (Wajib)">
+        
+        <select id="serviceType">
+            <option value="universal">Universal (Semua App)</option>
+            <option value="com.grab.driver">Grab Driver</option>
+            <option value="com.gojek.driver.bike">Gojek Driver</option>
+            <option value="com.shopee.food.driver">ShopeeFood Driver</option>
+        </select>
+
+        <button class="btn-play" onclick="pushToFirebase(true)">▶ START CLONING</button>
+        <button class="btn-stop" onclick="pushToFirebase(false)">⏹ STOP ALL</button>
+        <div class="status" id="statusLabel">Ready to ghosting...</div>
+    </div>
+
+    <!-- Firebase SDK Legacy (Mudah untuk Webview) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // === GANTI DENGAN CONFIG FIREBASE LO ===
+        const firebaseConfig = {
+            databaseURL: "https://GANTI-NAMA-PROJECT-LO.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Setup Map
+        const map = L.map('map').setView([-6.2000, 106.8166], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        let marker = L.marker([-6.2000, 106.8166], {draggable: true}).addTo(map);
+
+        function pushToFirebase(active) {
+            const aid = document.getElementById('androidId').value;
+            const type = document.getElementById('serviceType').value;
+            const pos = marker.getLatLng();
+
+            if (!aid) { alert("Android ID Kosong!"); return; }
+
+            // Path: users/ANDROID_ID/services/PACKAGE_NAME
+            const targetPath = 'users/' + aid + '/services/' + type.replace(/\./g, '_');
+            
+            database.ref(targetPath).set({
+                lat: pos.lat,
+                lon: pos.lng,
+                acc: 10.0,
+                active: active
+            }).then(() => {
+                document.getElementById('statusLabel').innerText = "Updated: " + type;
+            }).catch(e => alert(e.message));
+        }
+    </script>
+</body>
+</html>
