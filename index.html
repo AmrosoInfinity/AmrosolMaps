@@ -72,6 +72,19 @@
                 document.getElementById('statusLabel').innerText = "Updated: " + type;
             }).catch(e => alert(e.message));
         }
+
+        async function stopAll() {
+            const aid = document.getElementById('androidId').value;
+            if (!aid) return alert("Android ID Kosong!");
+
+            const services = ['universal', 'com_grab_driver', 'com_gojek_driver_bike', 'com_shopee_food_driver'];
+    
+            for (let s of services) {
+            await database.ref('users/' + aid + '/services/' + s).update({ active: false });
+        }
+    document.getElementById('statusLabel').innerText = "All Services Stopped";
+}
+
     </script>
 </body>
 </html>
