@@ -140,13 +140,9 @@
 
     move-result-object v1
 
-    invoke-virtual {v1}, Landroid/location/LocationResult;->validate()Landroid/location/LocationResult;
-
-    move-result-object v1
-
     invoke-virtual {p0, v1}, Lcom/android/server/location/provider/AbstractLocationProvider;->reportLocation(Landroid/location/LocationResult;)V
     :try_end_1b
-    .catch Landroid/location/LocationResult$BadLocationException; {:try_start_b .. :try_end_1b} :catch_1d
+    .catch Ljava/lang/Exception; {:try_start_b .. :try_end_1b} :catch_1d
 
     .line 63
     nop
@@ -159,12 +155,8 @@
     move-exception v1
 
     .line 62
-    .local v1, "e":Landroid/location/LocationResult$BadLocationException;
-    new-instance v2, Ljava/lang/IllegalArgumentException;
-
-    invoke-direct {v2, v1}, Ljava/lang/IllegalArgumentException;-><init>(Ljava/lang/Throwable;)V
-
-    throw v2
+    .local v1, "e":Ljava/lang/Exception;
+    return-void
 .end method
 
 
