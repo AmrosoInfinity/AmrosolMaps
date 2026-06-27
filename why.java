@@ -32,7 +32,7 @@
     .local p3, "extraAttributionTags":Ljava/util/Set;, "Ljava/util/Set<Ljava/lang/String;>;"
     sget-object v0, Lcom/android/internal/util/ConcurrentUtils;->DIRECT_EXECUTOR:Ljava/util/concurrent/Executor;
 
-    invoke-direct {p0, v0, p2, p1, p3}, Lcom/android/server/location/provider/AbstractLocationProvider;-><init>(Ljava/util/concurrent/Executor;Landroid/location/util/identity/CallerIdentity;Landroid/location/provider/ProviderProperties;Ljava/util/Set;)V
+    invoke-direct {p0, v0, p2, p1, p3}, Lcom/android/server/location/provider/AbstractLocationProvider;-><init>(Ljava/util/concurrent/Executor;Landroid/location/util/identity/CallerIdentity;Landro[...]
 
     .line 47
     return-void
@@ -51,7 +51,7 @@
 
     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
 
-    const-string/jumbo v1, "last mock location="
+    const-string/jumbo v1, "last location="
 
     invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
@@ -121,7 +121,7 @@
 
     .line 57
     .local v0, "location":Landroid/location/Location;
-    const/4 v1, 0x1
+    const/4 v1, 0x0
 
     invoke-virtual {v0, v1}, Landroid/location/Location;->setIsFromMockProvider(Z)V
 
@@ -166,6 +166,5 @@
 
     throw v2
 .end method
-
 
 
